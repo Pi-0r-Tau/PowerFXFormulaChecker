@@ -3,6 +3,13 @@ Checks PowerFX formulae, provides a formula explanation and breakdown, explains 
 
 A Edge browser extension for validating and analyzing Power FX formulae used in Power Apps
 
+# Work in progress Feature(s) 
+- Syntax constraints and usage limitations
+- Specific formula suggestions based on user input context
+
+
+## Core Components
+
 ```mermaid
 graph TD
     A[Popup HTML] --> B[Formula Input]
@@ -20,9 +27,6 @@ graph TD
     L[Controls.js] --> M[Control Properties]
     M --> K
 ```
-
-
-## Core Components
 
 ### 1. Validator Engine (validator.js)
 Primary validation logic handling:
