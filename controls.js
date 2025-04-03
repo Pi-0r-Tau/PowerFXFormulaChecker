@@ -1411,10 +1411,10 @@ const ButtonControl = {
     properties: {
       Source: { type: "string", description: "The URL of the web page to display." },
       ContentLanguage: { type: "string", description: "The language of the web page content." },
-      OnNavigate: { type: "function", description: "How the app responds when the web page navigates to a new URL." },
+      OnNavigate: { type: "function", description: "How the app responds when the web page navigates to a Screen." },
       OnNavigateComplete: { type: "function", description: "How the app responds when the navigation is complete." },
       OnNavigateError: { type: "function", description: "How the app responds when a navigation error occurs." },
-      Reload: { type: "boolean", description: "Whether to reload the web page." },
+      Reload: { type: "boolean", description: "Whether to reload the Screen." },
       Height: { type: "number", description: "The distance between the control's top and bottom edges." },
       Width: { type: "number", description: "The distance between the control's left and right edges." },
       X: { type: "number", description: "The distance from the left edge of the control to the left edge of its parent." },
