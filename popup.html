@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Power FX Validator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Power FX Formula Validator</h1>
+
+        <!-- Enhanced Validator Section -->
+        <div class="input-section">
+            <h2>Formula Validator</h2>
+            <select id="functionSelector" class="function-selector">
+                <option value="">Select a function to learn more...</option>
+            </select>
+            <textarea id="formulaInput" placeholder="Enter your Power FX formula here..."></textarea>
+            <button id="validateBtn">Validate & Analyze</button>
+            <div id="validationResult"></div>
+            <div id="explanationResult"></div>
+        </div>
+
+        <div id="functionInfo" class="hidden">
+            <h3>Function Information</h3>
+            <div id="functionDetails"></div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls-section">
+            <h2>Power Apps Controls</h2>
+            <select id="controlSelector">
+                <option value="">Select a control...</option>
+            </select>
+            <div id="controlInfo" class="hidden">
+                <h3>Control Information</h3>
+                <div id="controlDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="rules.js"></script>
+    <script src="validator.js"></script>
+    <script src="controls.js"></script>
+</body>
+</html>
