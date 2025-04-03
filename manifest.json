@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "8Power FX Formula Validator",
+    "name": "Power FX Formula Validator",
     "version": "1.0",
-    "description": "Validates Power FX formulas and provides helpful guidance",
+    "description": "Validates Power FX formulas and provides helpful insights, explains operators, provides Formula breakdown, explains issues with links to Microsoft guidance",
     "permissions": [],
     "action": {
       "default_popup": "popup.html"
