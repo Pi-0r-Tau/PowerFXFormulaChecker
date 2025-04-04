@@ -121,7 +121,7 @@ The extension's validation rules come from multiple sources:
 1. **Function Categories**
    - Table manipulation (Filter, Sort, GroupBy) etc
    - Text operations (Concat, Replace, Search) etc
-   - Math operations (Sum, Average, Round) etc
+   - Mathematic operations (Sum, Average, Round) etc
    - Date/Time functions (DateAdd, TimeValue) etc
    - Behavioral functions (Navigate, Patch) etc
 
