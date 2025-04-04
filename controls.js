@@ -1,4 +1,5 @@
 'use strict';
+//TODO: update spelling of colour to color, check properties for issues or mistakes, recheck formula for issues
 const ButtonControl = {
     name: "Button",
     description: "A control that users can select to trigger an action.",
