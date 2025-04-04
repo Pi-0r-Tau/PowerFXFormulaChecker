@@ -1,3 +1,4 @@
+'use strict';
 const ButtonControl = {
     name: "Button",
     description: "A control that users can select to trigger an action.",
