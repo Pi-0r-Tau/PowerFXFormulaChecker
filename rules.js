@@ -1,4 +1,7 @@
+'use strict';
+
 // Power FX Operators
+//TODO: Check each formula, as mistakes may be present, check validations for incorrect validator params
 
 // Concatenation operator (alternative to + for strings)
 const ConcatenationOperatorRule = {
