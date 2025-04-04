@@ -1,3 +1,4 @@
+'use strict';
 document.addEventListener('DOMContentLoaded', function() {
     const formulaInput = document.getElementById('formulaInput');
     const validateBtn = document.getElementById('validateBtn');
@@ -152,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             description: 'Tests if a value exists in a table or collection (case-sensitive)'
         }
     };
-
+   // TODO: Update with more documentation links for power fx functions
     const documentationLinks = {
         'Text': 'https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-text',
         'DateAdd': 'https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-dateadd-datediff',
