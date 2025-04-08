@@ -1252,7 +1252,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function validateOperator(op, operands, formula) { // TODO: Fix formula declared but not read value wise.
+    function validateOperator(op, operands, formula) { // TODO: Fix formula declared but not read value
         const rule = operatorRules[op];
         if (!rule) return { isValid: false, error: `Unknown operator: ${op}` };
 
@@ -1534,7 +1534,7 @@ const toggleScript = `
     }
 `;
 
-function checkDelegation(formula, analysis) {
+function checkDelegation(formula, analysis) { //TODO: Review regex and improve messages
     const delegationRisks = {
         'Filter': {
             pattern: /Filter\s*\([^)]*[<>=!]+[^)]*\)/i,
