@@ -86,7 +86,7 @@ Internal:
 
 ### Validation Process
 1. User inputs formula in popup.html
-2. validator.js parses and tokenizes input
+2. validator.js parses and tokenizes formula input
 3. Rules are applied from rules.js
 4. Control-specific validations from controls.js
 5. Results displayed in UI with suggestions
