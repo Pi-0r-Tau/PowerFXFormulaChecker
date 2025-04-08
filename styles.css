@@ -150,7 +150,7 @@ code {
     box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
 }
 
-/* Adding merged styles from popup.css */
+/* Adding merged styles from popup.css, don't need two seperate css files */
 #check {
     background-color: #0078d4;
     color: white;
