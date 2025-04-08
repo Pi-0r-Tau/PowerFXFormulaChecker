@@ -7,15 +7,15 @@ const ButtonControl = {
     description: "A control that users can select to trigger an action.",
     examples: [
         {
-          formula: "Button1.OnSelect = Navigate(Screen1)",
+          formula: "Button1.OnSelect = Navigate(Screen1)", //VALID
           description: "Navigate to Screen1 when Button1 is clicked"
         },
         {
-          formula: "Button1.OnSelect = Collect(MyCollection, {Name: TextInput1.Text, Date: Today()})",
+          formula: "Button1.OnSelect = Collect(MyCollection, {Name: TextInput1.Text, Date: Today()})", //VALID
           description: "Add new record to a collection when Button1 is clicked"
         },
         {
-          formula: "Button1.Fill = If(IsBlank(TextInput1.Text), RGBA(233, 233, 233, 1), RGBA(0, 201, 117, 1))",
+          formula: "Button1.Fill = If(IsBlank(TextInput1.Text), RGBA(233, 233, 233, 1), RGBA(0, 201, 117, 1))", //VALID 
           description: "Change button color based on text input value"
         },
     ],
@@ -44,11 +44,11 @@ const ButtonControl = {
           description: "Set default text in a text input"
         },
         {
-          formula: "TextInput1.OnChange = UpdateContext({userName: TextInput1.Text})",
+          formula: "TextInput1.OnChange = UpdateContext({userName: TextInput1.Text})", //VALID
           description: "Store input value in a variable when text changes"
         },
         {
-          formula: "TextInput1.BorderColor = If(IsBlank(TextInput1.Text), Red, Green)",
+          formula: "TextInput1.BorderColor = If(IsBlank(TextInput1.Text), Red, Green)", //VALID
           description: "Change border color based on whether input is empty"
 
         },
@@ -77,15 +77,15 @@ const ButtonControl = {
     description: "A control that shows data but doesn't accept user input.",
     examples: [
     {
-        formula: "Label1.Text = \"Hello, \" & UserName",
+        formula: "Label1.Text = \"Hello, \" & UserName", //VALID
         description: "Display personalized greeting"
     },
     {
-        formula: "Label1.Color = If(varStatus = \"Error\", Red, Black)",
+        formula: "Label1.Color = If(varStatus = \"Error\", Red, Black)", //VALID
         description: "Change text color based on status variable"
     },
     {
-        formula: "Label1.Text = Text(Now(), \"[$-en-US]dddd, mmmm d, yyyy h:mm AM/PM\")",
+        formula: "Label1.Text = Text(Now(), \"[$-en-US]dddd, mmmm d, yyyy h:mm AM/PM\")", //VALID
         description: "Display current date and time in a formatted manner"
     },
 ],
@@ -113,15 +113,15 @@ const ButtonControl = {
     examples: [
     {
 
-          formula: "Gallery1.Items = Filter(Customers, StartsWith(Name, TextInput1.Text))",
+          formula: "Gallery1.Items = Filter(Customers, StartsWith(Name, TextInput1.Text))", //VALID
           description: "Filter gallery items based on text input"
     },
     {
-          formula: "Gallery1.OnSelect = Navigate(DetailScreen, None, {CustomerID: Gallery1.Selected.ID})",
+          formula: "Gallery1.OnSelect = Navigate(DetailScreen, None, {CustomerID: Gallery1.Selected.ID})", //VALID
          description: "Navigate to detail screen with selected item ID"
     },
     {
-          formula: "Gallery1.TemplateFill = If(ThisItem.IsActive, RGBA(240, 240, 240, 1), RGBA(220, 220, 220, 1))",
+          formula: "Gallery1.TemplateFill = If(ThisItem.IsActive, RGBA(240, 240, 240, 1), RGBA(220, 220, 220, 1))", //VALID
           description: "Change template background color based on item status"
     },
 ],
@@ -146,15 +146,15 @@ const ButtonControl = {
     description: "A control to display and select records from tabular data.",
     examples: [
         {
-          formula: "DataTable1.Items = SortByColumns(Filter(Employees, JobTitle = \"Manager\"), \"HireDate\", Descending)",
+          formula: "DataTable1.Items = SortByColumns(Filter(Employees, JobTitle = \"Manager\"), \"HireDate\", Descending)", //VALID
           description: "Filter and sort data in a data table"
         },
         {
-          formula: "DataTable1.OnSelect = Select(Form1, DataTable1.SelectedItems.First())",
+          formula: "DataTable1.OnSelect = Select(Form1, DataTable1.SelectedItems.First())", //VALID
           description: "Select a form record based on data table selection"
         },
         {
-          formula: "DataTable1.Visible = !IsBlank(Gallery1.Selected)",
+          formula: "DataTable1.Visible = !IsBlank(Gallery1.Selected)", //VALID
           description: "Show data table only when an item is selected in a gallery"
         },
     ],
@@ -178,15 +178,15 @@ const ButtonControl = {
     description: "A control that provides a list of options for users to select from.",
     examples: [
         {
-          formula: "Dropdown1.Items = Distinct(Customers, Country)",
+          formula: "Dropdown1.Items = Distinct(Customers, Country)", //VALID
           description: "Populate dropdown with unique country values"
         },
         {
-          formula: "Dropdown1.OnChange = UpdateContext({selectedCountry: Dropdown1.Selected.Value})",
+          formula: "Dropdown1.OnChange = UpdateContext({selectedCountry: Dropdown1.Selected.Value})", //VALID
           description: "Store selected value in a variable when selection changes"
         },
         {
-          formula: "Dropdown1.Default = First(Filter(Dropdown1.Items, Value = varDefaultCountry))",
+          formula: "Dropdown1.Default = First(Filter(Dropdown1.Items, Value = varDefaultCountry))", //VALID
           description: "Set default value based on a variable",
         },
     ],
@@ -212,15 +212,15 @@ const ButtonControl = {
     description: "A control that users can turn on or off.",
     examples: [
         {
-          formula: "Toggle1.OnCheck = UpdateContext({darkMode: true})",
+          formula: "Toggle1.OnCheck = UpdateContext({darkMode: true})", //VALID
           description: "Update a variable when toggle is checked"
         },
         {
-          formula: "Toggle1.OnUncheck = Set(varNotifications, false)",
+          formula: "Toggle1.OnUncheck = Set(varNotifications, false)", //VALID
           description: "Set a variable when toggle is unchecked"
         },
         {
-          formula: "Toggle1.Default = User().IsAdmin",
+          formula: "Toggle1.Default = User().IsAdmin", //VALID
           description: "Set default state based on user role"
         },
     ],
@@ -263,15 +263,15 @@ const ButtonControl = {
     description: "A control that shows and manages data from a data source.",
     examples: [
         {
-          formula: "Form1.Item = LookUp(Customers, ID = varSelectedCustomerID)",
+          formula: "Form1.Item = LookUp(Customers, ID = varSelectedCustomerID)", //VALID
           description: "Load a specific record into a form"
         },
         {
-          formula: "Form1.OnSuccess = Navigate(BrowseScreen, ScreenTransition.Cover)",
+          formula: "Form1.OnSuccess = Navigate(BrowseScreen, ScreenTransition.Cover)", //VALID
           description: "Navigate to a different screen on successful submission"
         },
         {
-          formula: "Form1.Visible = !IsBlank(Gallery1.Selected)",
+          formula: "Form1.Visible = !IsBlank(Gallery1.Selected)", //VALID
           description: "Show form only when an item is selected in a gallery"
         },
     ],
@@ -296,15 +296,15 @@ const ButtonControl = {
     description: "The main container in which screens and controls appear.",
     examples: [
         {
-          formula: "App.OnStart = ClearCollect(GlobalVariables, {Theme: \"Light\", UserRole: \"Admin\"})",
+          formula: "App.OnStart = ClearCollect(GlobalVariables, {Theme: \"Light\", UserRole: \"Admin\"})", //VALID
           description: "Initialize variables when app starts"
         },
         {
-          formula: "Screen1.Fill = If(varDarkMode, RGBA(32, 32, 32, 1), RGBA(250, 250, 250, 1))",
+          formula: "Screen1.Fill = If(varDarkMode, RGBA(32, 32, 32, 1), RGBA(250, 250, 250, 1))", //VALID
           description: "Set screen background based on theme mode"
         },
         {
-          formula: "Screen1.OnVisible = Reset(Form1); Set(varSelectedCustomerID, Blank())",
+          formula: "Screen1.OnVisible = Reset(Form1); Set(varSelectedCustomerID, Blank())", //VALID
           description: "Reset form and variable when screen becomes visible"
         },
     ],
@@ -324,15 +324,15 @@ const ButtonControl = {
     description: "A control that lets users select a date.",
     examples: [
         {
-          formula: "DatePicker1.DefaultDate = Today() + 7",
+          formula: "DatePicker1.DefaultDate = Today() + 7", //VALID
           description: "Set default date to one week from today"
         },
         {
-          formula: "DatePicker1.OnSelect = UpdateContext({selectedDate: DatePicker1.SelectedDate})",
+          formula: "DatePicker1.OnSelect = UpdateContext({selectedDate: DatePicker1.SelectedDate})", //VALID
           description: "Store selected date in a variable"
         },
         {
-          formula: "DatePicker1.DisplayMode = If(IsBlank(TextInput1.Text), DisplayMode.Disabled, DisplayMode.Edit)",
+          formula: "DatePicker1.DisplayMode = If(IsBlank(TextInput1.Text), DisplayMode.Disabled, DisplayMode.Edit)", //VALID
           description: "Enable date picker only when text input has value"
         },
     ],
@@ -358,15 +358,15 @@ const ButtonControl = {
     description: "A control that counts up or down.",
     examples: [
         {
-          formula: "Timer1.Start = true",
+          formula: "Timer1.Start = true", //VALID
           description: "Start the timer"
         },
         {
-          formula: "Timer1.OnTimerEnd = Notify(\"Time's up!\")",
+          formula: "Timer1.OnTimerEnd = Notify(\"Time's up!\")", //VALID
           description: "Show notification when timer ends"
         },
         {
-          formula: "Timer1.Duration = Value(TextInput1.Text) * 1000",
+          formula: "Timer1.Duration = Value(TextInput1.Text) * 1000", //VALID
           description: "Set timer duration based on text input (in seconds)"
         },
     ],
@@ -393,15 +393,15 @@ const ButtonControl = {
     description: "A control that displays PDF documents.",
     examples: [
         {
-          formula: "PDFViewer1.Document = PDF_Dataverse.Document",
+          formula: "PDFViewer1.Document = PDF_Dataverse.Document", //VALID
           description: "Display a PDF document from Dataverse"
         },
         {
-          formula: "PDFViewer1.StartPage = Value(TextInput1.Text)",
+          formula: "PDFViewer1.StartPage = Value(TextInput1.Text)", //VALID
           description: "Go to a specific page based on text input"
         },
         {
-          formula: "PDFViewer1.Visible = !IsBlank(Gallery1.Selected.DocumentID)",
+          formula: "PDFViewer1.Visible = !IsBlank(Gallery1.Selected.DocumentID)", //VALID
           description: "Show PDF viewer only when a document is selected"
         },
     ],
@@ -425,15 +425,15 @@ const ButtonControl = {
     description: "A control that lets users format text with styles, links, and images.",
     examples: [
         {
-          formula: "RichTextEditor1.DefaultText = \"<h1>Welcome</h1><p>Enter your notes here.</p>\"",
+          formula: "RichTextEditor1.DefaultText = \"<h1>Welcome</h1><p>Enter your notes here.</p>\"", //VALID
           description: "Set default HTML content"
         },
         {
-          formula: "RichTextEditor1.OnChange = Patch(Notes, LookUp(Notes, ID = varNoteID), {Content: RichTextEditor1.HtmlText})",
+          formula: "RichTextEditor1.OnChange = Patch(Notes, LookUp(Notes, ID = varNoteID), {Content: RichTextEditor1.HtmlText})", //VALID
           description: "Save content to a data source when it changes"
         },
         {
-          formula: "RichTextEditor1.DisplayMode = If(User().IsAdmin, DisplayMode.Edit, DisplayMode.View)",
+          formula: "RichTextEditor1.DisplayMode = If(User().IsAdmin, DisplayMode.Edit, DisplayMode.View)", //VALID
           description: "Allow editing only for admin users"
         },
     ],
@@ -457,15 +457,15 @@ const ButtonControl = {
     description: "A control that combines a dropdown list with text input capabilities.",
     examples: [
         {
-          formula: "ComboBox1.Items = Search(Products, ComboBox1.SearchText, \"Name\")",
+          formula: "ComboBox1.Items = Search(Products, ComboBox1.SearchText, \"Name\")", //VALID
           description: "Filter items based on search text"
         },
         {
-          formula: "ComboBox1.OnSelect = Collect(SelectedProducts, ComboBox1.SelectedItems)",
+          formula: "ComboBox1.OnSelect = Collect(SelectedProducts, ComboBox1.SelectedItems)", //VALID
           description: "Add selected items to a collection"
         },
         {
-          formula: "ComboBox1.DefaultSelectedItems = Filter(Products, Featured = true)",
+          formula: "ComboBox1.DefaultSelectedItems = Filter(Products, Featured = true)", //VALID
           description: "Pre-select featured products"
         },
     ],
@@ -494,17 +494,17 @@ const ButtonControl = {
     description: "A control that graphically displays data series.",
     examples: [
         {
-          formula: "Chart1.Items = AddColumns(GroupBy(Sales, \"Category\", \"Category\"), \"Total\", Sum(ThisRecord.Value))",
+          formula: "Chart1.Items = AddColumns(GroupBy(Sales, \"Category\", \"Category\"), \"Total\", Sum(ThisRecord.Value))", //VALID
           description: "Group and aggregate data for chart display"
         },
         {
 
-          formula: "Chart1.OnSelect = Navigate(DetailScreen, None, {Category: Chart1.SelectedItems.First().Category})",
+          formula: "Chart1.OnSelect = Navigate(DetailScreen, None, {Category: Chart1.SelectedItems.First().Category})", //VALID
           description: "Navigate to details screen when a chart element is selected"
         },
         {
 
-          formula: "Chart1.Series = Table({Series: \"2023 Sales\", Value: varSales2023}, {Series: \"2024 Sales\", Value: varSales2024})",
+          formula: "Chart1.Series = Table({Series: \"2023 Sales\", Value: varSales2023}, {Series: \"2024 Sales\", Value: varSales2024})", //VALID
           description: "Display multiple data series in a chart"
         },
     ],
