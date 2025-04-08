@@ -1,7 +1,7 @@
   # PowerFxFormulaChecker
 Checks PowerFX formulae, provides a formula explanation and breakdown, explains controls and associated formulae
 
-A Edge browser extension for validating and analyzing Power FX formulae used in Power Apps
+A Edge browser extension for validating and analyzing Power FX formulae used in Power Apps, explains deeply and directly nested complex formula including operator usage.
 
 # Work in progress Feature(s) 
 - Syntax constraints and usage limitations
