@@ -6,7 +6,7 @@ A Edge browser extension for validating and analyzing Power FX formulae used in 
 # Work in progress Feature(s) 
 - Syntax constraints and usage limitations
 - Specific formula suggestions based on user input context
-
+- Scroll bar horizontal for larger formula breakdowns
 
 ## Core Components
 
