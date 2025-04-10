@@ -1,12 +1,23 @@
-  # PowerFxFormulaChecker
-Checks PowerFX formulae, provides a formula explanation and breakdown, explains controls and associated formulae
+# PowerFxFormulaChecker
+A browser extension for validating, analyzing and explaining Power FX formulae used in Power Apps, providing visuals for complex nested formulas. Allowing the user to understand deeply nested PowerFx.
 
-A Edge browser extension for validating and analyzing Power FX formulae used in Power Apps, explains deeply and directly nested complex formula including operator usage.
+## Features
+- Formula validation and analysis
+- Function and operator syntax checking
+- Documentation link integration for Power FX functions
+- Real-time formula explanation and breakdown
+- Performance and delegation analysis
+- Best practices suggestions
+- Control property validation
+- Formula tree visualization
 
-# Work in progress Feature(s) 
+## Work in Progress Features
 - Syntax constraints and usage limitations
-- Specific formula suggestions based on user input context
-- Scroll bar horizontal for larger formula breakdowns
+- Context-aware formula suggestions
+- Performance optimization warnings
+- Style suggestions improvements
+- Extended function coverage
+- Custom rule creation
 
 ## Core Components
 
@@ -26,20 +37,24 @@ graph TD
     J --> K[UI Display]
     L[Controls.js] --> M[Control Properties]
     M --> K
+    N[Documentation Links] --> K
+    O[Formula Tree] --> K
+    P[Performance Analysis] --> J
 ```
 
 ### 1. Validator Engine (validator.js)
 Primary validation logic handling:
-- Formula parsing and tokenization
-- Syntax checking
-- Function validation
-- Operator validation
-- Performance analysis
-- Delegation warnings
+- Formula lexical analysis and tokenization
+- Syntax  error checking
+- Function and operator validation
+- Performance impact analysis
+- Delegation rule checking
+- Control property validation
+- Documentation link mapping
 
 Dependencies:
-- rules.js: Contains function and operator rules
-- controls.js: Control-specific validations
+- rules.js: Validation rules
+- controls.js: Control definitions
 
 ### 2. Rules Engine (rules.js)
 Contains validation rules for:
@@ -48,26 +63,28 @@ Contains validation rules for:
 - Data types
 - Best practices
 
-Dependencies:
-- None (standalone rule definitions)
+Dependencies: None
 
 ### 3. Controls Registry (controls.js)
 Defines Power Apps controls and their properties:
-- Property definitions
-- Examples
-- Validation rules
+- Property definitions and types
+- Valid formula patterns
+- Examples and usage
+- Default values
+- Validation constraints
 
-Dependencies:
-- None (standalone control definitions)
+Dependencies: None
 
 ## File Structure
 ```
-powerfxadvanced/
-├── popup.html       # Main UI
-├── validator.js     # Core validation logic
-├── rules.js        # Validation rules
+powerFxFormulaChecker/
+├── popup.html       # Main extension UI
+├── validator.js     # Core validation engine
+├── rules.js        # Function and operator rules
 ├── controls.js     # Control definitions
 ├── styles.css      # UI styling
+├── formula-tree.js # Tree visualization
+├── formula-tree.html # Tree view
 └── manifest.json   # Extension configuration
 ```
 
@@ -81,22 +98,28 @@ Internal:
 - validator.js → controls.js
 - popup.html → styles.css
 - popup.html → validator.js
+- formula-tree.html → formula-tree.js
 
 ## Implementation Details
 
 ### Validation Process
 1. User inputs formula in popup.html
-2. validator.js parses and tokenizes formula input
-3. Rules are applied from rules.js
-4. Control-specific validations from controls.js
-5. Results displayed in UI with suggestions
+2. validator.js tokenizes and parses input
+3. Rules applied from rules.js
+4. Control validations from controls.js
+5. Performance analysis conducted
+6. Results displayed with suggestions
+7. Documentation links provided
+8. Formula tree visualization generated
 
 ### Error Handling
-- Syntax errors
+- Syntax errors with position information
 - Function usage errors
 - Operator misuse
+- Type mismatch identification
 - Delegation warnings
-- Performance implications
+- Performance impact warnings
+- Nested formula analysis
 
 ## Rule Management
 
@@ -115,15 +138,18 @@ The extension's validation rules come from multiple sources:
    - Control-specific rules
    - Function behavior documentation
 
-
 ### Function Analysis
 
 1. **Function Categories**
    - Table manipulation (Filter, Sort, GroupBy) etc
    - Text operations (Concat, Replace, Search) etc
-   - Mathematic operations (Sum, Average, Round) etc
-   - Date/Time functions (DateAdd, TimeValue) etc
+   - Mathematical functions (Sum, Average, Round) etc
+   - Date/Time handling (DateAdd, TimeValue) etc
    - Behavioral functions (Navigate, Patch) etc
+   - Collection operations
+   - Data operations
+   - Type conversion
+   - Controls and navigation
 
 2. **Context Awareness**
    - ThisItem scope in galleries
@@ -131,20 +157,21 @@ The extension's validation rules come from multiple sources:
    - With/As scope modifications
    - Global/local variable access
 
-
-### Operator Semantics and Behaviour
+### Operator Semantics
 
 1. **Type-Specific Operations**
-   - Numeric operators (+, -, *, /, ^)
-   - String concatenation (&)
-   - Logical operators (&&, ||, !)
-   - Comparison operators (=, <>, <, >, <=, >=)
+   - Numeric operations
+   - String manipulation
+   - Logical operations
+   - Comparison operations
+   - Collection operations
+   - Date/Time operations
 
 2. **Operator Precedence**
 
-   High -> Low Priority
+   High → Low Priority
    1. Parentheses ()
-   2. Unary operators (-, !)
+   2. Unary operators
    3. Power (^)
    4. Multiply, Divide (*, /)
    5. Add, Subtract (+, -)
