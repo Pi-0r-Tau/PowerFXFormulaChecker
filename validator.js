@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const validationResult = document.getElementById('validationResult');
     const functionInfo = document.getElementById('functionInfo');
     const functionDetails = document.getElementById('functionDetails');
-    const dataTypes = ['Boolean', 'Number', 'String', 'Date', 'Record', 'Table'];  //TODO: Integrate with style Issues TODO feature 
+    const dataTypes = ['Boolean', 'Number', 'String', 'Date', 'Record', 'Table'];  //TODO: Integrate with style Issues TODO feature
 
     const operatorRules = {
         '+': {
@@ -242,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
         validateAndAnalyzeFormula();
     });
 
+
     function validateAndAnalyzeFormula() {
         const formula = formulaInput.value;
         const explanationResult = document.getElementById('explanationResult');
@@ -262,7 +263,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 complexity: 'Simple',
                 styleIssues: [],
                 delegationIssues: [],
-                formulaBreakdown: []
+                formulaBreakdown: [],
+                originalFormula: formula
             });
             return;
         }
@@ -279,10 +281,13 @@ document.addEventListener('DOMContentLoaded', function() {
             complexity: 'Simple',
             styleIssues: [],
             delegationIssues: [],
-            formulaBreakdown: []
+            formulaBreakdown: [],
+            originalFormula: formula
         };
-        // TODO: FIX index declared but never used
-        formulas.forEach((singleFormula, index) => {
+
+
+
+        formulas.forEach((singleFormula) => {
             // Parse nested functions and analyze
             const parsedFunctions = parseNestedFunctions(singleFormula) || [];
             const functionValidation = validateFunctions(singleFormula, parsedFunctions) || {
@@ -348,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
         explanationResult.innerHTML = explanation;
 
         // Initialize collapsibles after rendering the report TODO: FIX interactive collapsibles
-        setTimeout(initializeCollapsibles, 0);
+        setTimeout(window.initializeCollapsibleSections, 0);
     }
 
     function validateParentheses(formula) {
@@ -402,8 +407,25 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    /**
+     *Generates a HTML report based on the analysis of a formula.
+     The report includes sections for validation results, formula breakdown, warnings, delegation issues, style suggestions,
+     complexity analysis and performance suggestions.
+     * @param {Object} analysis - The analysis object containing the results of the formula analysis
+     * @param {Array<object>} analysis.errors - An array of error messages found in the analysis
+     * @param {Array<object>} analysis.warnings - An array of warning messages found during the analysis
+     * @param {Array<object>} analysis.suggestions - An array of suggestions for improving the formula
+     * @param {Array<object>} analysis.functions - An array of functions parsed from the formula
+     * @param {string} analysis.complexity - The complexity level of the formula ('Simple', 'Moderate' 'Complex' ..)
+     * @param {Array<object>} analysis.styleIssues - An array of style issues found during the analysis (Work in Progress Feature)
+     * @param {Array<object>} analysis.delegationIssues - An array of delegation isses found during the analysis
+     * @param {Array<object>} analysis.formulaBreakdown - A breakdown of the user input PowerFx formula, including parsed functions and their details
+     * @param {string} analysis.originalFormula - The original PowerFx formula that was analyzed
+     * @returns {string} The Generated HTML report as a string
+     */
+
     function generateDetailedReport(analysis) {
-        let report = '<div class="analysis-report">';
+        let report = '<div class="detailed-report">';
 
         // Move error section to the top and always show it
         report += '<div class="section validation-results">';
@@ -415,20 +437,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         report += '</div>';
 
-        // Formula Breakdown Section
-        report += '<div class="section formula-breakdown">';
-        report += '<h3>Formula Breakdown</h3>';
-        //TODO: FIX index not used
-        analysis.formulaBreakdown.forEach((item, index) => { 
-            report += `
-                <div class="formula-item">
-                    <div class="formula-text"><code>${item.formula}</code></div>
-                    <div class="functions-list">
-                        ${generateNestedFunctionBreakdown(item.functions)}
-                    </div>
-                </div>`;
-        });
-        report += '</div>';
+        // Add Formula Breakdown section with original formula and open in new tab button
+        report += `<div class="section formula-breakdown">
+            <div class="section-header">
+                <h3>Formula Breakdown</h3>
+                <button class="open-tree-button" id="openFormulaTree">
+                    Open in New Window 📋
+                </button>
+            </div>
+            <div class="original-formula">
+                <div class="formula-label">Original Formula:</div>
+                <code class="formula-text">${analysis.originalFormula}</code>
+            </div>
+            <div class="formula-tree-container" id="formulaTreeContainer">
+                ${generateNestedFunctionBreakdown(analysis.functions)}
+            </div>
+        </div>`;
 
         // Validation Results Section
         if (analysis.errors.length > 0) {
@@ -475,6 +499,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return report;
     }
 
+    /**
+     *Generates a HTML representation of nested functions within a PowerFx formula,
+     recursively processes each function and its arguments, creating a formula tree structure
+     * @param {Array<object>} functions - An array of function objects to process
+     * @param {number} level  [Level=0] - The urrent level of nesting, used for generating unique IDs
+     * @returns {string} The Generated HTML string representing the nested functions
+     */
+
     function generateNestedFunctionBreakdown(functions, level = 0) {
         let html = '<div class="formula-tree">';
         functions.forEach((func, idx) => {
@@ -482,7 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
             html += `
                 <div class="tree-node">
                     <div class="function-node">
-                        <div class="function-header" onclick="toggleFunction('${uniqueId}')">
+                        <div class="function-header" data-function-id="${uniqueId}">
                             <span class="function-name">${func.name}</span>
                             <div class="tree-controls">
                                 ${documentationLinks[func.name] ?
@@ -510,14 +542,47 @@ document.addEventListener('DOMContentLoaded', function() {
         return html;
     }
 
-    window.toggleFunction = function(id) {
-        const content = document.getElementById(id);
-        const header = content.previousElementSibling;
-        const toggle = header.querySelector('.tree-toggle');
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'openFormulaTree') {
+            const treeContainer = document.getElementById('formulaTreeContainer');
+            if (treeContainer) {
+                openFormulaInNewTab(treeContainer);
+            }
+        }
+    });
 
-        content.classList.toggle('collapsed');
-        toggle.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
-    };
+    function openFormulaInNewTab(treeElement) {
+        if (!treeElement) return;
+
+        chrome.windows.create({
+            url: chrome.runtime.getURL('formula-tree.html'),
+            type: 'popup',
+            width: 1200,
+            height: 800
+        }, (window) => {
+            setTimeout(() => {
+                chrome.tabs.query({windowId: window.id}, (tabs) => {
+                    chrome.tabs.sendMessage(tabs[0].id, {
+                        type: 'FORMULA_TREE_DATA',
+                        html: treeElement.innerHTML || ''
+                    });
+                });
+            }, 500);
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        const header = e.target.closest('.function-header');
+        if (header) {
+            const functionId = header.dataset.functionId;
+            const content = document.getElementById(functionId);
+            const toggle = header.querySelector('.tree-toggle');
+            if (content && toggle) {
+                content.classList.toggle('collapsed');
+                toggle.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+            }
+        }
+    });
 
     function generateArgExplanation(arg) {
         // Check if the argument contains a function
@@ -553,14 +618,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let explanation = '';
 
-
-
+/**
+ *Checks if the operator is part of a function name or indentifier
+ * @param {string} arg - The argument to check
+ * @param {string} op - The operator to check for
+ * @returns {boolean} True if the Operator is part of a function name or indentifier, false otherwise
+ */
         // This section is repeated due to annoying bug. TODO: Review and fix, remove redundant code.
     function isPartOfFunctionName(arg, op) {
         // Check if the 'in' is part of a function name like "ColumnNames" or other identifiers
         const functionPattern = new RegExp(`[A-Za-z]+${op}[A-Za-z]+`, 'i');
         return functionPattern.test(arg);
     }
+
+    /**
+     * Checks if the argument contains the specified operator
+     * @param {string} arg - The argument to check
+     * @param {string} op - The operator to check for
+     * @returns {boolean} True if operator is found in the argument, false if not.
+     */
 
     function hasOperator(arg, op) {
         // More precise operator detection
@@ -569,12 +645,21 @@ document.addEventListener('DOMContentLoaded', function() {
         return pattern.test(arg);
     }
 
+    /**
+     * Splits the argument by the specified operator, respecting function parentheses
+     * @param {string} arg - The argument to split
+     * @param {string} op - The operator to split by
+     * @returns {Array<string|null>} An array containing the left and right parts of the split argument, or [null, null]
+     * if the split is not possible
+     */
+
     function splitByOperator(arg, op) {
         // More precise splitting that respects function parentheses
         const escapedOp = op.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const parts = arg.split(new RegExp(`(?<![A-Za-z])${escapedOp}(?![A-Za-z])`));
         return parts.length === 2 ? [parts[0].trim(), parts[1].trim()] : [null, null];
     }
+
 
         // Check for comparison operations with improved operator detection
         Object.entries(operators).forEach(([op, desc]) => {
@@ -612,6 +697,12 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
+    /**
+     * Generates a HTML description for a given function based on its rule(s)
+     * @param {string} functionName - The name of the function to explain
+     * @returns {string} The generated HTML string containing the function's description, syntax, return type, validation results
+     * and documentation link
+     */
     function getFunctionExplanation(functionName) {
         const rule = window[functionName + 'Rule'];
         if (!rule) return '';
@@ -631,6 +722,12 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
+    /**
+     * Provides an explanation for a given formula complexity level
+     * @param {string} complexity - The complexity level to explain
+     * @returns {string} The Explanation for the given complexity level
+     */
+
     function getComplexityExplanation(complexity) {
         const explanations = {
             'Simple': 'This formula is straightforward and easy to maintain.',
@@ -641,12 +738,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return explanations[complexity] || '';
     }
 
+    /**
+     * Determines the higher complexity level between two given levels, helpful for multi line and multi formula user inputs
+     * @param {string} current - The current complexity level
+     * @param {string} new_ - The new complexity level to compare
+     * @returns {string} The higher complexity level between the current and new levels
+     */
+
     function getHigherComplexity(current, new_) {
         const levels = ['Simple', 'Moderate', 'Complex', 'Very Complex'];
         const currentIndex = levels.indexOf(current);
         const newIndex = levels.indexOf(new_);
         return levels[Math.max(currentIndex, newIndex)];
     }
+
+    /**
+     * Checks if the formula is a valid expression, validates each function call,
+     * and recursively validates nested functions
+     * @param {string} formula - The formula to validate
+     * @param {Object<array>} parsedFunctions - An array of parsed function objects
+     * @returns {Object} An object containing the validation results:
+     * - `errors` {Array<string>}: An array of error messages found during validation.
+     * - `suggestions` {Array<string>}: An array of suggestions for improving the formula
+     * `functions` {Array<Object>}: An array of function details, including validation results
+     */
 
     function validateFunctions(formula, parsedFunctions) {
         const result = {
@@ -690,6 +805,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return result;
     }
 
+    /**
+     *Performs basic validation of an expression
+     Checks for balanced parentheses and valid operator usage. BASIC
+     * @param {string} expr - The expression to validate
+     * @returns {boolean} True if the expression is valid, false if not
+     */
+
     // Add helper function to validate expressions
     function isValidExpression(expr) {
         // Basic expression validation
@@ -718,7 +840,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
     }
-
+/**
+ *Retrieves the description of a function based on predifined rules from the exported rules of rules.js
+ * @param {string} functionName - The name of the function to get the description for
+ * @returns {string} The description of the function or a default message if the description is not found.
+ */
     function getFunctionDescription(functionName) {
         // Get description from rules.js if available
         const rule = window[functionName + 'Rule'];
@@ -842,6 +968,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    /**
+     * Validates the arguments passed to a function based on predefined rules, handles special cases for certain functions and performs
+     * general validation for other functions. The special validation logic is applied for functions including With, Patch,
+     * ForAll and DateDiff. For other functions the function checks the number of parameters required (TODO:Review validation in rules.js)
+     * and runs the functions's custom validation method if it is available.
+     * @param {string} functionName - The name of the function to validate
+     * @param {Array<string>} args - The arguments passed to the function
+     * @returns {Object} An Object containing the validation result:
+     * - `isValid` {boolean}: Indicates whether the function call is valid.
+     * - `error` {string}: Provides an error message if the function call is inValid
+     * @returns
+     */
+
     function validateFunctionCall(functionName, args) {
         const rule = window[functionName + 'Rule'];
         if (!rule) {
@@ -896,13 +1035,23 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         }
 
-        // Run the function's validate method if it exists
+        // Run the function's validate method
         if (rule.validate) {
             return rule.validate(args);
         }
 
         return { isValid: true };
     }
+
+    /**
+     * Parses nested Fucntions within a PowerFx formula string
+     * @param {string} formula - The formula string to parse
+     * @returns {array<Object>} An array of Objects representing the parsed functions
+     * Each Object contains:
+     * - `name` {string}: The name of the function
+     * - `args` {Array<string>}: The arguments of the function
+     * - `nestedFunctions` {Array<Object>}: The nested functions within the arguments
+     */
 
     function parseNestedFunctions(formula) {
         const functions = [];
@@ -999,6 +1148,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return functions;
     }
 
+    /**
+     *
+     * @param {string} argsString - The String containing the function arguments
+     * @returns {Array<string>} An array of strings, each representing an individual argument
+     */
+
     function splitFunctionArguments(argsString) {
         const args = [];
         let currentArg = '';
@@ -1052,6 +1207,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return args;
     }
+
+    /**
+     * Splits a string containing multiple formulas seperated by semicolons into a array of individual formulas
+     * This function is intended for use when there are multiple formulas in the input string
+     * @param {string} formula - The string containg multiple formulas
+     * @returns {Array<string>} An array of strings, each representing an indiviual formula
+     */
 
     // Helper function to split formulas by semicolons
     function splitFormulas(formula) {
@@ -1136,7 +1298,7 @@ document.addEventListener('DOMContentLoaded', function() {
             score += (formula.match(new RegExp('\\' + op, 'g')) || []).length;
         });
 
-        if (score > 75) return 'Very Complex'; //TODO: Review scoring for complexity 
+        if (score > 75) return 'Very Complex'; //TODO: Review scoring for complexity
         if (score > 60) return 'Complex'; //TODO: Review scoring for complexity
         if (score > 30) return 'Moderate'; //TODO: Review scoring for complexity
         return 'Simple';
@@ -1152,7 +1314,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const stack = [];
         const errors = [];
-        let pos = 0;  // TODO: FIX declared pos 
+        let pos = 0;  // TODO: FIX declared pos
         let inString = false;
 
         for (let i = 0; i < formula.length; i++) {
@@ -1252,7 +1414,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function validateOperator(op, operands, formula) { // TODO: Fix formula declared but not read value
+    /**
+     *
+     * @param {string} op - The Operator to validate
+     * @param {Array<string>} operands - The operands used with the operator
+     * @returns {Object} An object containg the validation result
+     * - `isValid` {boolean}: Indicates whether the operator usage is valid
+     * - `error` {string}: Provides an error message if the operator usage is invalid.
+     */
+
+    function validateOperator(op, operands) { // FIXED: Fix formula declared but not read value
         const rule = operatorRules[op];
         if (!rule) return { isValid: false, error: `Unknown operator: ${op}` };
 
@@ -1277,15 +1448,34 @@ document.addEventListener('DOMContentLoaded', function() {
         return { isValid: true };
     }
 
+    /**
+     *
+     * @param {string} formula - The formula to parse
+     * @returns {{
+     * inString: boolean,
+     * start: number,
+     * end: number,
+     * content: string,
+     * closed: boolean
+     * }[]} Array of string literal objects
+     */
+
     function extractStringLiterals(formula) {
         const literals = [];
         let inString = false;
         let start = -1;
         let content = '';
+        let escaped = false;
 
         for (let i = 0; i < formula.length; i++) {
             const char = formula[i];
-            if (char === '"' && formula[i - 1] !== '\\') {
+
+            if (char === '\\' && !escaped) {
+                escaped = true;
+                continue;
+            }
+
+            if (char === '"' && !escaped) {
                 if (!inString) {
                     start = i;
                     content = '';
@@ -1301,6 +1491,8 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (inString) {
                 content += char;
             }
+
+            escaped = false;
         }
 
         if (inString) {
@@ -1481,33 +1673,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+/**
+ *
+ * @param {string} formula - The Formula to check
+ * @param {validationAnalysis} analysis - Analysis results object
+ * @private
+ */
+
 function checkDataTypeConsistency(formula, analysis) {
-    // Check Text function usage
+    // Combine patterns for better performance
+    const patterns = {
+        numeric: /[\d.]+\s*[\+\-\*\/]\s*[A-Za-z]/,
+        typeMixing: /[\d.]+\s*\&\s*[A-Za-z]/,
+        date: /\bDate\s*\([^)]*\)/gi
+    };
+
+    // Check Text function usage with improved argument validation
     const textFunctionRegex = /\bText\s*\(([^)]+)\)/g;
     let match;
 
     while ((match = textFunctionRegex.exec(formula)) !== null) {
-        const args = match[1].split(',');
+        const args = match[1].split(',').map(arg => arg.trim());
         if (args.length > 0) {
-            const firstArg = args[0].trim();
+            const firstArg = args[0];
             if (!isNaN(firstArg) && !firstArg.startsWith('"')) {
-                analysis.suggestions.push(
-                    `Consider verifying if explicit type conversion is necessary for the argument "${firstArg}" in the Text function`
-                );
+                analysis.suggestions.push({
+                    message: `Consider verifying if explicit type conversion is necessary for the argument "${firstArg}" in the Text function`,
+                    severity: 'warning'
+                });
             }
         }
     }
 
-    // Check numeric operations
-    const numericPattern = /[\d.]+\s*[\+\-\*\/]\s*[A-Za-z]/;
-    if (numericPattern.test(formula)) {
-        analysis.suggestions.push('Verify that variables in numeric operations contain numeric values');
-    }
+  // Check patterns with improved error messages
+  if (patterns.numeric.test(formula)) {
+    analysis.suggestions.push({
+        message: 'Verify that variables in numeric operations contain numeric values',
+        severity: 'warning'
+    });
+}
 
-    // Check type mixing
-    const typeMixingPattern = /[\d.]+\s*\&\s*[A-Za-z]/;
-    if (typeMixingPattern.test(formula)) {
-        analysis.suggestions.push('Potential type mixing detected. Consider using Text() for explicit conversion');
+    if (patterns.typeMixing.test(formula)) {
+        analysis.suggestions.push({
+            message: 'Potential type mixing detected. Consider using Text() for explicit conversion',
+            severity: 'warning'
+        });
     }
 
     // Check date operations
@@ -1519,9 +1729,15 @@ function checkDataTypeConsistency(formula, analysis) {
 
 // Helper function to check if an expression is numeric
 function isNumericExpression(expr) {
-    // Remove spaces and check if it's a valid number or numeric variable pattern
+    // Numeric validation with additional check for numeric operations
     const cleanExpr = expr.trim();
-    return !isNaN(cleanExpr) || /^[A-Za-z]+[0-9]*$/.test(cleanExpr);
+    if (!isNaN(cleanExpr)) return true;
+    if (/^[A-Za-z]+[0-9]*$/.test(cleanExpr)) {
+        // Check if it's a known numeric variable/function
+        return true;
+    }
+    // Check for numeric operations
+    return /^[\d+\-*/\s()]+$/.test(cleanExpr);
 }
 
 
@@ -1534,6 +1750,14 @@ const toggleScript = `
     }
 `;
 
+/**
+ * Analyzes a formula to identify potential delegation issues with certain functions (Filter, Sort, Search, LookUp, Sum)
+ * Provides suggestions for improving delegation support via a message and a link to Microsoft documentation.
+ * @param {string} formula - The formula to analyze for delegation issues.
+ * @param {Object} analysis - An object to store the analysis results.
+ * @param {Array<object>} analysis.delegationIssues - An array to store the delegation issues found in the formula
+ * @param {Array<string>} analysis.suggestions - An array to store suggestions for improving delegation support
+ */
 function checkDelegation(formula, analysis) { //TODO: Review regex and improve messages
     const delegationRisks = {
         'Filter': {
@@ -1600,6 +1824,14 @@ function checkDelegation(formula, analysis) { //TODO: Review regex and improve m
     }
 }
 
+/**
+ * Analyzes a formula to indentify inefficient collection usage patterns and provides suggestions to improve performance, quite basic atm.
+ * @param {string} formula - The formula to analyze for collection usage patterns
+ * @param {object} analysis - An object to store the analysis results
+ * @param {Array<object} analysis.suggestions - An array to store perfomance improvement suggestions
+ * @param {Array<string>} analysis.warnings - An array to store warnings about detected patterns
+ */
+
 function checkCollectionPatterns(formula, analysis) {
     // Check for inefficient collection usage patterns
     if (/Collect\s*\([^)]+\)/i.test(formula)) {
@@ -1636,3 +1868,43 @@ function checkCollectionPatterns(formula, analysis) {
         analysis.warnings.push('Multiple collection operations detected. Consider combining operations for better performance.');
     }
 }
+
+/**
+ * Intiializes collapsible sections in the validation report
+ * @listens DOMContentLoaded
+ * @fires click
+ */
+
+window.initializeCollapsibleSections = function() {
+    const collapsibles = document.getElementsByClassName('collapsible');
+    Array.from(collapsibles).forEach(collapsible => {
+        // Add click handler
+        collapsible.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const content = this.nextElementSibling;
+            if (content && content.classList.contains('content')) {
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.classList.add('collapsed');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.classList.remove('collapsed');
+                }
+            }
+        });
+
+        // Initialize state
+        const content = collapsible.nextElementSibling;
+        if (content && content.classList.contains('content')) {
+            if (!collapsible.classList.contains('active')) {
+                content.classList.add('collapsed');
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+    });
+};
+
+// Call when DOM is ready
+document.addEventListener('DOMContentLoaded', window.initializeCollapsibleSections);
