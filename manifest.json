@@ -1,12 +1,20 @@
 {
-    "manifest_version": 3,
-    "name": "Power FX Formula Validator",
-    "version": "1.0",
-    "description": "Validates Power FX formulas and provides helpful insights, explains operators, provides Formula breakdown, explains issues with links to Microsoft guidance",
-    "permissions": [],
-    "action": {
-      "default_popup": "popup.html"
-    }
-  
-  }
-  
+  "manifest_version": 3,
+  "name": "Power FX Formula Validator",
+  "version": "1.0",
+  "description": "Validates Power FX formulas and provides helpful insights, explains operators, provides Formula breakdown, explains issues using links to Microsoft guidance",
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "web_accessible_resources": [{
+    "resources": ["formula-tree.html", "formula-tree.js", "styles.css"],
+    "matches": ["<all_urls>"]
+  }]
+}
