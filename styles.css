@@ -8,6 +8,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    overflow-x: auto; /* Add horizontal scrolling */
+    max-width: 100%;
+    padding: 20px;
 }
 
 .input-section {
@@ -174,16 +177,16 @@ code {
 }
 
 .collapsible {
-    background-color: #f0f0f0;
+    background-color: #f1f1f1;
     cursor: pointer;
-    padding: 12px;
+    padding: 18px;
     width: 100%;
     border: none;
     text-align: left;
     outline: none;
-    font-size: 14px;
-    margin: 4px 0;
-    border-radius: 4px;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 2px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -201,14 +204,17 @@ code {
 }
 
 .content {
-    padding: 0 12px;
-    max-height: none;
+    padding: 0 18px;
+    max-height: 1000px; /* Adjust based on your needs */
+    overflow: hidden;
     transition: max-height 0.3s ease-out;
     background-color: white;
 }
 
 .content.collapsed {
     max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .content li {
@@ -349,6 +355,28 @@ code {
     padding: 15px;
     background: #f8f8f8;
     border-radius: 4px;
+    overflow-x: auto;  /* Add horizontal scrolling */
+    white-space: nowrap; /* Prevent line wrapping */
+    max-width: 100%;  /* Ensure container doesn't exceed parent width */
+    padding-bottom: 10px; /* Add space for the scrollbar */
+}
+
+.explanation-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.explanation-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.explanation-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.explanation-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .formula-part {
@@ -356,6 +384,8 @@ code {
     padding: 10px;
     border-radius: 4px;
     border-left: 4px solid;
+    display: inline-block; /* Keep parts on same line */
+    min-width: max-content; /* Ensure content doesn't wrap */
 }
 
 .valid-part {
@@ -374,15 +404,20 @@ code {
     align-items: center;
     font-weight: bold;
     margin-bottom: 5px;
+    white-space: nowrap; /* Prevent header text from wrapping */
 }
 
 .part-type {
     color: #666;
+    white-space: normal; /* Allow these to wrap within their containers */
+    word-wrap: break-word; /* Break long words if necessary */
 }
 
 .part-description {
     margin: 5px 0;
     color: #333;
+    white-space: normal; /* Allow these to wrap within their containers */
+    word-wrap: break-word; /* Break long words if necessary */
 }
 
 .part-error {
@@ -649,8 +684,14 @@ code {
 }
 
 .formula-tree {
-    padding: 10px;
-    font-family: 'Consolas', monospace;
+    min-width: fit-content;
+    padding: 15px;
+}
+
+.formula-tree-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 10px 0;
 }
 
 .tree-node {
@@ -756,4 +797,59 @@ code {
 .operator-explanation li {
     margin: 3px 0;
     color: #666;
+}
+
+.open-tree-button {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.open-tree-button:hover {
+    background-color: #e0e0e0;
+}
+
+.formula-tree-container {
+    padding: 20px;
+    max-width: 5000px;
+    margin: 0 auto;
+    overflow-x: auto;
+    margin-top: 10px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.section-header h3 {
+    margin: 0;
+}
+
+.original-formula {
+    background: #f5f5f5;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border-left: 4px solid #0078d4;
+}
+
+.formula-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.formula-text {
+    display: block;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: Consolas, monospace;
+    padding: 5px 0;
 }
