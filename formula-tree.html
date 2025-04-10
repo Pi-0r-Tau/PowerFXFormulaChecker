@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Formula Tree View</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Styles specific to the formula tree view window */
+        body {
+            margin: 0;
+            padding: 20px;
+            min-width: 1200px;
+        }
+        .container {
+            max-width: 95% !important;
+            width: 95% !important;
+            margin: 0 auto;
+        }
+        .formula-tree-container {
+            min-width: 1000px;
+            width: 100%;
+            overflow: visible;
+        }
+        .formula-tree {
+            width: 100%;
+            min-width: fit-content;
+        }
+        
+        .function-node {
+            width: auto;
+            min-width: fit-content;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formula Breakdown</h1>
+        <div id="formulaTreeContainer" class="formula-tree-container"></div>
+    </div>
+    <script src="formula-tree.js"></script>
+</body>
+</html>
