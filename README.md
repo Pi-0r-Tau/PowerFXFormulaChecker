@@ -183,5 +183,9 @@ The extension's validation rules come from multiple sources:
    9. Logical AND (&&)
    10. Logical OR (||)
   
+### Current minor issues
+- Bug with function description for ClearCollect, however this does not interfere with the main features of the extension
+- Rare issue with Object Object returning for ClearCollect function performance suggestions, intermittent. 
+  
 ### Why make this:
 The ability to check a formula and learn more about examples is not as readily available as I wanted when learning Power apps, moreover the error feedback in the formula input is quite vague and unhelpful. I also wanted to be able to visulise the nested structures of deeply nested Power Fx formulas and have an easy tool to provide insights into operator usage. The implementation is messy but this is a MVP and it shall be improved over time and updated as more features for forumulas updated. The main reason why I choose not use the PowerFx interpreter or other is simply it was fun to not use it and I wanted it to not have any external dependencies. This is a running theme for my projects.
